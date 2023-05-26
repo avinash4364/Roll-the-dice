@@ -1,3 +1,8 @@
+:root {
+  --primary: #9f25ff;
+  --secondary: #ff7a00;
+}
+
 *,
 *::before,
 *::after {
@@ -13,5 +18,133 @@ html {
 body {
   min-height: 100vh;
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(220.55deg, #9f25ff 0%, #ff7a00 100%);
+  background: linear-gradient(
+    220.55deg,
+    var(--primary) 0%,
+    var(--secondary) 100%
+  );
+}
+
+button {
+  border: none;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-box {
+  position: relative;
+  display: flex;
+  text-align: center;
+  text-transform: uppercase;
+  border-radius: 9px;
+  box-shadow: 0px 5px 8px -3px rgba(0, 0, 0, 0.1),
+    4px 8px 14px -2px rgba(0, 0, 0, 0.1), 6px 20px 15px 0px rgba(0, 0, 0, 0.1);
+}
+
+.game-box .player {
+  width: 40rem;
+  padding: 6.4rem 0;
+  background-color: var(--primary);
+  color: #fff;
+}
+
+.game-box .player1 {
+  border-top-left-radius: 9px;
+  border-bottom-left-radius: 9px;
+
+  /* 50% darker */
+  background-color: #501380;
+  padding-right: 2.4rem;
+}
+
+.game-box .player2 {
+  padding-left: 2.4rem;
+  border-top-right-radius: 9px;
+  border-bottom-right-radius: 9px;
+
+  /* 50% lighter */
+  background-color: #cf92ff;
+}
+
+.player-name {
+  font-size: 5.2rem;
+  font-weight: 400;
+  padding-bottom: 2.4rem;
+}
+
+.player-score {
+  font-size: 6.2rem;
+  padding-bottom: 9.6rem;
+  color: var(--secondary);
+}
+
+.score-box {
+  background-color: var(--secondary);
+  padding: 1.2rem;
+  width: 20rem;
+  margin: 0 auto;
+  border-radius: 7px;
+}
+
+.score-box h3 {
+  font-weight: 400;
+  font-size: 2rem;
+  padding-bottom: 2.4rem;
+}
+
+.player-current--score {
+  font-size: 2.4rem;
+}
+
+.game-box .btn {
+  position: absolute;
+  padding: 1.2rem 2.4rem;
+  font-weight: 700;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 10rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  font-size: 2rem;
+  box-shadow: 0px 7px 10px -3px rgba(0, 0, 0, 0.1);
+}
+
+.game-box .new-btn {
+  top: 5%;
+}
+
+.game-box .roll-btn {
+  top: 64%;
+}
+
+.game-box .hold-btn {
+  top: 78%;
+}
+
+.game-box .dice {
+  display: none;
+  position: absolute;
+  width: 8rem;
+  height: 8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 30%;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.1),
+    0px 5px 8px 0px rgba(0, 0, 0, 0.1), 0px 8px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+.game-box .dice.show {
+  display: block;
 }
