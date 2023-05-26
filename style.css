@@ -146,6 +146,21 @@ button {
     0px 5px 8px 0px rgba(0, 0, 0, 0.1), 0px 8px 10px 0px rgba(0, 0, 0, 0.1);
 }
 
-.game-box .dice.show {
+.dice.show {
   display: block;
+}
+
+.dice.show .dot {
+  position: absolute;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background-color: #000;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
+.dot {
+  left: 50%;
+  top: 50%;
 }
