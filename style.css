@@ -53,16 +53,20 @@ button {
 .game-box .player {
   width: 40rem;
   padding: 6.4rem 0;
-  background-color: var(--primary);
+
+  /* 50% lighter */
+  background-color: #cf92ff;
   color: #fff;
+}
+
+.game-box .player.show-bg {
+  /* 50% darker */
+  background-color: #501380;
 }
 
 .game-box .player1 {
   border-top-left-radius: 9px;
   border-bottom-left-radius: 9px;
-
-  /* 50% darker */
-  background-color: #501380;
   padding-right: 2.4rem;
 }
 
@@ -70,9 +74,6 @@ button {
   padding-left: 2.4rem;
   border-top-right-radius: 9px;
   border-bottom-right-radius: 9px;
-
-  /* 50% lighter */
-  background-color: #cf92ff;
 }
 
 .player-name {
