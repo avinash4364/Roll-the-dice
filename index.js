@@ -1,21 +1,19 @@
 'use strict';
 
+// selecting elements
 const newBtn = document.querySelector('.new-btn');
 const holdBtn = document.querySelector('.hold-btn');
 const rollBtn = document.querySelector('.roll-btn');
-const players = document.querySelectorAll('.player');
-const playerOneScoreDisplay = document.querySelectorAll('.player-score')[0];
-const playerTwoScoreDisplay = document.querySelectorAll('.player-score')[1];
-const playerOneCurrent = document.querySelectorAll('.player-current--score')[0];
-const playerTwoCurrent = document.querySelectorAll('.player-current--score')[1];
-const dice = document.querySelector('.dice');
+const diceEl = document.querySelector('.dice');
+const score0El = document.getElementById('score-0');
+const score1El = document.getElementById('score-1');
+const player0El = document.getElementById('player-0');
+const player1El = document.getElementById('player-1');
+const current0El = document.getElementById('current-score--0');
+const current1El = document.getElementById('current-score--1');
 
-let diceNum;
-let playerOneScore = 0;
-let playerTwoScore = 0;
-let playerOneCurrentScore = 0;
-let playerTwoCurrentScore = 0;
-let playerOneSelected = true;
+// starting conditions
+let dice, playerActive, gameRunning, currentScore, score;
 
 // top and left positions of all the dots displayed on the dice
 const dotPositions = {
@@ -52,13 +50,28 @@ const dotPositions = {
   ],
 };
 
-// revert background
-const revert = function () {
-  players.forEach((player) => {
-    player.classList.toggle('show-bg');
-  });
-};
+// initialization functionality
+function init() {
+  dice = 0;
+  playerActive = 0;
+  gameRunning = true;
+  currentScore = 0;
+  score = [0, 0];
+  player0El.classList.add('player-active');
+  player1El.classList.remove('player-active');
+  player0El.classList.remove('player-win');
+  player1El.classList.remove('player-win');
+  score0El.textContent = 0;
+  score1El.textContent = 0;
+  current0El.textContent = 0;
+  current1El.textContent = 0;
+  diceEl.innerHTML = '';
+  diceEl.classList.remove('show');
+}
 
+init();
+
+// functionality for creating dots on the dice
 const createDot = function (dotNum) {
   const dotPosition = dotPositions[dotNum];
   for (let i = 0; i < dotNum; i++) {
@@ -66,80 +79,72 @@ const createDot = function (dotNum) {
     div.classList.add('dot');
     div.style.left = dotPosition[i][0] + '%';
     div.style.top = dotPosition[i][1] + '%';
-    dice.appendChild(div);
+    diceEl.appendChild(div);
   }
 };
 
-// click event to the hold button
-rollBtn.addEventListener('click', () => {
-  // a random number between 1 and 6
-  diceNum = Math.trunc(Math.random() * 6 + 1);
-  console.log(diceNum);
+// revert background functionality
+function revert() {
+  player0El.classList.toggle('player-active');
+  player1El.classList.toggle('player-active');
+}
 
-  // check if dots are already present and then remove them
-  //   we can set the innerHTML of the parent element to empty
-  dice.innerHTML = '';
+// switching player functionality
+function switchPlayer() {
+  currentScore = 0;
+  document.getElementById(`current-score--${playerActive}`).textContent =
+    currentScore;
+  playerActive = playerActive ? 0 : 1;
 
-  //   create the dot according to the random number generated
-  createDot(diceNum);
+  // revert the background
+  revert();
+}
 
-  // show the dice
-  dice.classList.add('show');
+// rolling dice functionality (only if the game is running)
+rollBtn.addEventListener('click', function () {
+  if (gameRunning) {
+    // generate a random dice roll
+    dice = Math.trunc(Math.random() * 6) + 1;
 
-  // if the dice displays one then the player loses the current score and is not able to hold(add to the total) the score
-  if (diceNum === 1) {
-    playerOneCurrentScore = 0;
-    playerTwoCurrentScore = 0;
-    playerOneCurrent.textContent = playerOneCurrentScore;
-    playerTwoCurrent.textContent = playerTwoCurrentScore;
+    // create dots for the dice and show it (remove the dots if already present)
+    diceEl.innerHTML = '';
+    createDot(dice);
+    diceEl.classList.add('show');
 
-    revert();
-    playerOneSelected = !playerOneSelected;
-  } else {
-    if (playerOneSelected) {
-      playerOneCurrentScore += diceNum;
-      playerOneCurrent.textContent = playerOneCurrentScore;
+    if (dice !== 1) {
+      // add the dice roll to the current score of active player
+      currentScore += dice;
+      document.getElementById(`current-score--${playerActive}`).textContent =
+        currentScore;
     } else {
-      playerTwoCurrentScore += diceNum;
-      playerTwoCurrent.textContent = playerTwoCurrentScore;
+      // switch player
+      switchPlayer();
     }
   }
 });
 
-holdBtn.addEventListener('click', () => {
-  // hold(add) the current score to the player's total score
-  if (playerOneSelected) {
-    playerOneScore += playerOneCurrentScore;
-    playerOneCurrentScore = 0;
-    playerOneCurrent.textContent = playerOneCurrentScore;
-    playerOneScoreDisplay.textContent = playerOneScore;
-    playerOneSelected = false;
-  } else {
-    playerTwoScore += playerTwoCurrentScore;
-    playerTwoCurrentScore = 0;
-    playerTwoCurrent.textContent = playerTwoCurrentScore;
-    playerTwoScoreDisplay.textContent = playerTwoScore;
-    playerOneSelected = true;
-  }
+// hold button functionality (add the current score of the player to its total score)
+holdBtn.addEventListener('click', function () {
+  if (gameRunning) {
+    // add the current score to the total score of the active player
+    score[playerActive] += currentScore;
+    document.getElementById(`score-${playerActive}`).textContent =
+      score[playerActive];
 
-  // revert the background
-  revert();
+    if (score[playerActive] >= 100) {
+      gameRunning = false;
+      document
+        .getElementById(`player-${playerActive}`)
+        .classList.add('player-win');
+      diceEl.classList.remove('show');
+    } else {
+      switchPlayer();
+    }
+  }
 });
 
-// reset the game
-newBtn.addEventListener('click', () => {
-  playerOneScore = 0;
-  playerTwoScore = 0;
-  playerOneCurrentScore = 0;
-  playerTwoCurrentScore = 0;
-  playerOneScoreDisplay.textContent = playerOneScore;
-  playerTwoScoreDisplay.textContent = playerTwoScore;
-  playerOneCurrent.textContent = playerOneCurrentScore;
-  playerTwoCurrent.textContent = playerTwoCurrentScore;
-  dice.classList.remove('show');
-  dice.innerHTML = '';
-  if (!playerOneSelected) {
-    revert();
-    playerOneSelected = true;
-  }
+// reset game functionality
+newBtn.addEventListener('click', function () {
+  gameRunning = true;
+  init();
 });
