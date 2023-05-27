@@ -69,6 +69,7 @@ function init() {
   diceEl.classList.remove('show');
 }
 
+// start the game
 init();
 
 // functionality for creating dots on the dice
@@ -146,5 +147,7 @@ holdBtn.addEventListener('click', function () {
 // reset game functionality
 newBtn.addEventListener('click', function () {
   gameRunning = true;
+
+  // restart the game
   init();
 });
